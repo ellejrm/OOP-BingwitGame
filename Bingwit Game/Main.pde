@@ -1,12 +1,12 @@
-PImage mainbg, logo, play, levels, gamebg, backhome, lvlbg, lvl1, lvl2, lvl3;
+PImage mainbg, logo, play, levels, gamebg, backhome, lvlbg, lvl1, lvl2, lvl3, avatar;
 PFont gameFont;
-int currentLvl = 1, goal, kita;
-
+int currentLvl = 1, currentKita = 0, targetKita;
 int gameState = 0;
 
 void setup() {
   size(1280, 720);
-
+  smooth(8);
+  frameRate(60);
   mainbg = loadImage("mainbg.png");
   logo   = loadImage("bingwitlogo.png");
   play   = loadImage("play.png");
@@ -17,6 +17,7 @@ void setup() {
   lvl1 = loadImage("level1.png");
   lvl2 = loadImage("level2.png");
   lvl3 = loadImage("level3.png");
+  avatar = loadImage("danao&boat.png");
   gameFont = createFont("Lazydog.otf", 20);
 }
 
@@ -43,27 +44,29 @@ void drawMainMenu() {
 void drawGame() {
   image(gamebg, 0, 0, width, height);
   image(logo, 546, 10, 184, 98);
+  image(avatar, 515, 80, 250, 250);
   fill(253, 197, 76);
   rect(30, 20, 180, 40);
-  fill(253, 197, 76);
   rect(235, 20, 200, 40);
-  fill(253, 197, 76);
-  rect(30, 20, 180, 40);
-  fill(253, 197, 76);
-  rect(30, 20, 180, 40);
+  rect(840, 20, 200, 40);
+  rect(1070, 20, 180, 40);
     
   if (currentLvl == 1) {
-    goal = 1000;
+    targetKita = 300;
   } else if (currentLvl == 2) {
-    goal = 2500;
+    targetKita = 500;
   } else if (currentLvl == 3) {
-    goal = 5000;
+    targetKita = 700;
   }
 
-  fill(0, 0, 0);
+  fill(0);
   textFont(gameFont);
   text("LEVEL " + currentLvl, 80, 48);  
-  startTime();
+  drawTimer();
+  text("GOAL: " + targetKita, 885, 48); 
+  text("KITA: " + currentKita, 1125, 48); 
+  
+  drawFishingHook();
 }
 
 
