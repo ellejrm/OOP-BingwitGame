@@ -1,17 +1,47 @@
-float angle = 0;
+float reelSpeed = 0, normalLength = 150, extendedLength = 150, extendSpeed = 2.5, castAngle = 0;
+boolean casting = false, retracting = false;
 
 void drawFishingHook() {
-  // fixed point near avatar
-  float hookX = 538;
-  float hookY = 210;
+  float lineX = 538;
+  float lineY = 210;
   pushMatrix();
-  translate(hookX, hookY);
+  translate(lineX, lineY); //so that one end of the line remains static
 
-  float swing = radians(50) * sin(angle);
-  rotate(swing);
+  if(!casting){ //swings when it's not casting
+    float swing = radians(75) * sin(reelSpeed);
+    rotate(swing);
+    reelSpeed += 0.01; //speed of swing
+  } else {
+    rotate(castAngle); //stores the angle 
+  }
+  
   strokeWeight(3);
   stroke(212, 166, 60);
-  line(0, 0, 0, 200);
+  line(0, 0, 0, extendedLength);
+
+  image(hook, -30, extendedLength, 50, 50);
   popMatrix();
-  angle += 0.01;
+ 
+  if (casting && !retracting) { //casting
+    extendedLength += extendSpeed; //speed of extension
+    if (extendedLength >= height) { //extends
+      retracting = true;
+    }
+  } else if (casting && retracting) {//retracts
+    extendedLength -= extendSpeed;
+    if (extendedLength <= normalLength) {//checks if nasa normal length na uli
+      extendedLength = normalLength;
+      casting = false;
+      retracting = false;
+    }
+  }
+}
+
+void cast() {
+  if (!casting) {
+    casting = true;
+    retracting = false;
+    extendedLength = normalLength;
+    castAngle = radians(75) * sin(reelSpeed); 
+  }
 }
