@@ -1,9 +1,8 @@
-int startTime;
+int gameStartTime;
 int timeLimit = 60;
 
-void startTime() {
-
-  int elapsedTime = (millis() - startTime) / 1000;
+void drawTimer() {
+  int elapsedTime = (millis() - gameStartTime) / 1000;
   int remainingTime = timeLimit - elapsedTime;
   remainingTime = max(0, remainingTime);
   
