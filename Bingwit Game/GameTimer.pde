@@ -1,12 +1,31 @@
 int gameStartTime;
 int timeLimit = 60;
+int pausedTime = 0; 
+boolean timerRunning = true;
 
 void drawTimer() {
-  int elapsedTime = (millis() - gameStartTime) / 1000;
-  int remainingTime = timeLimit - elapsedTime;
-  remainingTime = max(0, remainingTime);
-  
-  fill(0, 0, 0);
-  textFont(gameFont);
-  text("TIME LEFT: " + remainingTime, 270, 48);
+  int elapsed;
+  if (timerRunning) {
+    elapsed = pausedTime + (millis() - gameStartTime) / 1000;
+  } else {
+    elapsed = pausedTime / 1000;
+  }
+
+  int timeLeft = timeLimit - elapsed; // countdown
+  if (timeLeft < 0) timeLeft = 0; 
+  text("TIME LEFT: " + timeLeft, 300, 48);
+}
+
+void pauseTimer() {
+  if (timerRunning) {
+    pausedTime += millis() - gameStartTime;
+    timerRunning = false;
+  }
+}
+
+void resumeTimer() {
+  if (!timerRunning) {
+    gameStartTime = millis();
+    timerRunning = true;
+  }
 }
