@@ -58,6 +58,7 @@ void drawLvl3Button() {
 void mousePressed() {
   if (gameState == 0 && isHover(playX, playY, playW, playH)) {
     gameState = 1;
+    gameStartTime = millis();
   }
   if (gameState == 0 && isHover(lvlX, lvlY, lvlW, lvlH)) {
     gameState = 2;
@@ -67,14 +68,17 @@ void mousePressed() {
   }
   if (gameState == 2 && isHover(lvl1X, lvl1Y, lvl1W, lvl1H)) {
     gameState = 1;
+    gameStartTime = millis();
   }
   if (gameState == 2 && isHover(lvl2X, lvl2Y, lvl2W, lvl2H)) {
     currentLvl = 2;
     gameState = 1;
+    gameStartTime = millis();
   }
   if (gameState == 2 && isHover(lvl3X, lvl3Y, lvl3W, lvl3H)) {
     currentLvl = 3;
     gameState = 1;
+    gameStartTime = millis();
   }
 }
 
