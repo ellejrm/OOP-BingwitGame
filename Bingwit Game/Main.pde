@@ -1,11 +1,11 @@
-PImage mainbg, logo, play, levels, gamebg, backhome, lvlbg, lvl1, lvl2, lvl3, avatar;
+PImage mainbg, logo, play, levels, gamebg, backhome, lvlbg, lvl1, lvl2, lvl3, avatar, hook, store, pause, pausePanel, resume, restart;
 PFont gameFont;
-int currentLvl = 1, currentKita = 0, targetKita;
-int gameState = 0;
+int currentLvl = 1, currentKita = 0, targetKita, gameState = 0;
+boolean justEnteredGame = false;
 
 void setup() {
   size(1280, 720);
-  smooth(8);
+  smooth(10);
   frameRate(60);
   mainbg = loadImage("mainbg.png");
   logo   = loadImage("bingwitlogo.png");
@@ -18,6 +18,10 @@ void setup() {
   lvl2 = loadImage("level2.png");
   lvl3 = loadImage("level3.png");
   avatar = loadImage("danao&boat.png");
+  hook = loadImage("hook.png");
+  store = loadImage("storebtn.png");
+  pause = loadImage("pause.png");
+  pausePanel = loadImage("pausepanel.png");
   gameFont = createFont("Lazydog.otf", 20);
 }
 
@@ -29,6 +33,8 @@ void draw() {
     drawGame();
   } else if (gameState == 2) {
     drawLevels();
+  } else if (gameState == 3) {
+    drawPausePanel();
   }
 }
 
@@ -42,6 +48,7 @@ void drawMainMenu() {
 }
 
 void drawGame() {
+  justEnteredGame = false;
   image(gamebg, 0, 0, width, height);
   image(logo, 546, 10, 184, 98);
   image(avatar, 515, 80, 250, 250);
@@ -50,6 +57,8 @@ void drawGame() {
   rect(235, 20, 200, 40);
   rect(840, 20, 200, 40);
   rect(1070, 20, 180, 40);
+  drawStoreButton();
+  drawPauseButton();
     
   if (currentLvl == 1) {
     targetKita = 300;
@@ -75,8 +84,13 @@ void drawLevels() {
   image(logo, 100, 50, 276, 147);
   image(lvlbg, 400, 87, 720, 546);
   
-  drawBackHomeButton();
+  drawBackHomeLvlButton(); 
   drawLvl1Button();
   drawLvl2Button();
   drawLvl3Button();
+}
+
+void drawPausePanel() {
+    image(pausePanel, 320, 118, 640, 484);
+    drawBackHomePauseButton();
 }
