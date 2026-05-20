@@ -1,3 +1,4 @@
 # OOP-BingwitGame
 codes
-tutulog muna aq, inaantok na me 
+no collision and random spawning yet
+no treasure and debris
