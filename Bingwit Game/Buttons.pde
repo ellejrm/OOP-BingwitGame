@@ -8,6 +8,8 @@ int lvl2X = 585, lvl2Y = 250, lvl2W = 341, lvl2H = 192;
 int lvl3X = 785, lvl3Y = 250, lvl3W = 341, lvl3H = 192;
 int storeX = 10, storeY = 550, storeW = 300, storeH = 170;
 int pauseX = 970, pauseY = 550, pauseW = 300, pauseH = 170;
+int resumeX = 350, resumeY = 350, resumeW = 276, resumeH = 147;
+int restartX = 650, restartY = 350, restartW = 276, restartH = 147;
 int screenX = 0, screenY = 0, screenW = 1280, screenH = 720;
 
 
@@ -83,11 +85,28 @@ void drawPauseButton() {
   }
 }
 
+void drawResumeButton() {
+    if (isHover(resumeX, resumeY, resumeW, resumeH)) {
+      image(resume, resumeX - 5, resumeY - 5, resumeW + 10, resumeH + 10);
+  } else {
+    image(resume, resumeX, resumeY, resumeW, resumeH);
+  }
+}
+
+void drawRestartButton() {
+  if (isHover(restartX, restartY, restartW, restartH)) {
+    image(restart, restartX - 5, restartY - 5, restartW + 10, restartH + 10);
+  } else {
+    image(restart, restartX, restartY, restartW, restartH);
+  }
+}
+
 void mousePressed() {
   if (gameState == 0 && isHover(playX, playY, playW, playH)) {
     gameState = 1;
     gameStartTime = millis();
     justEnteredGame = true;
+    restart();
   }
   if (gameState == 0 && isHover(lvlX, lvlY, lvlW, lvlH)) {
     gameState = 2;
@@ -125,12 +144,32 @@ void mousePressed() {
   if (gameState == 1 && !justEnteredGame && isHover(screenX, screenY, screenW, screenH)) {
     cast();
   }
+  if (gameState == 3 && isHover(resumeX, resumeY, resumeW, resumeH)) {
+    resumeTimer();
+    gameState = 1;
+  }
+  if (gameState == 3 && isHover(restartX, restartY, restartW, restartH)) {
+    restart();
+    gameState = 1;
 }
-
+}
 
 boolean isHover(int x, int y, int w, int h) {
   return mouseX > x &&
          mouseX < x + w &&
          mouseY > y &&
          mouseY < y + h;
+}
+
+void restart() {
+  pausedTime = 0;
+  gameStartTime = millis();
+  timerRunning = true;
+  currentKita = 0; 
+  
+ reelSpeed = 0;
+  extendedLength = normalLength; 
+  castAngle = 0;
+  casting = false;
+  retracting = false; 
 }
