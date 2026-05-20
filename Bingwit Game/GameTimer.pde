@@ -1,6 +1,6 @@
 int gameStartTime;
-int timeLimit = 60;
-int pausedTime = 0; 
+int timeLimit = 60; //countdown
+int pausedTime = 0; //the time left when u paused the game
 boolean timerRunning = true;
 
 void drawTimer() {
@@ -8,24 +8,30 @@ void drawTimer() {
   if (timerRunning) {
     elapsed = pausedTime + (millis() - gameStartTime) / 1000;
   } else {
-    elapsed = pausedTime / 1000;
+    elapsed = pausedTime;
   }
 
-  int timeLeft = timeLimit - elapsed; // countdown
-  if (timeLeft < 0) timeLeft = 0; 
+  int timeLeft = timeLimit - elapsed;
+  if (timeLeft < 0) timeLeft = 0;
+
+  fill(0);
   text("TIME LEFT: " + timeLeft, 300, 48);
+
+  if (timeLeft == 0) {
+    gameState = 0; //may lose/win panel dito, placeholder muna
+  }
 }
 
 void pauseTimer() {
   if (timerRunning) {
-    pausedTime += millis() - gameStartTime;
+    pausedTime += (millis() - gameStartTime) / 1000; 
     timerRunning = false;
   }
 }
 
 void resumeTimer() {
   if (!timerRunning) {
-    gameStartTime = millis();
+    gameStartTime = millis(); 
     timerRunning = true;
   }
 }
