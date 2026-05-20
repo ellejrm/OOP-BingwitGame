@@ -2,6 +2,7 @@ PImage mainbg, logo, play, levels, gamebg, backhome, lvlbg, lvl1, lvl2, lvl3, av
 PFont gameFont;
 int currentLvl = 1, currentKita = 0, targetKita, gameState = 0;
 boolean justEnteredGame = false;
+ArrayList<Fish> fishes = new ArrayList<Fish>();
 
 void setup() {
   size(1280, 720);
@@ -22,7 +23,15 @@ void setup() {
   store = loadImage("storebtn.png");
   pause = loadImage("pause.png");
   pausePanel = loadImage("pausepanel.png");
+  resume = loadImage("resume.png");
+  restart = loadImage("restart.png");
+  fish1 = loadImage("fish1.png");
+  fish2 = loadImage("fish2.png");
+  fish3 = loadImage("fish3.png");
   gameFont = createFont("Lazydog.otf", 20);
+  
+  //fish
+  fishes.add(new Fish(1, 200, 350, 100, 50, 2));
 }
 
 void draw() {
@@ -74,8 +83,11 @@ void drawGame() {
   drawTimer();
   text("GOAL: " + targetKita, 885, 48); 
   text("KITA: " + currentKita, 1125, 48); 
-  
   drawFishingHook();
+  
+  for (Fish f : fishes) {
+    f.display();
+  }
 }
 
 
@@ -93,4 +105,6 @@ void drawLevels() {
 void drawPausePanel() {
     image(pausePanel, 320, 118, 640, 484);
     drawBackHomePauseButton();
+    drawResumeButton();
+    drawRestartButton();
 }
