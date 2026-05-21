@@ -2,6 +2,8 @@ PImage fish1, fish2, fish3, sprite;
 
 class Fish extends SeaObject {
   int speed;
+  PImage sprite;
+  int alpha = 255; //  for fading of the fish when caught
 
   Fish(int id, float xLoc, float yLoc, int size, int value, int speed) {
     this.id = id;
@@ -16,27 +18,39 @@ class Fish extends SeaObject {
     else if (id == 2) sprite = fish2;
     else sprite = fish3;
   }
-  
+
+  @Override
   void display() {
-    pushMatrix();
-    translate(xLoc, yLoc);
-    if (speed < 0) {
-      scale(-1, 1);
-      image(sprite, -size, 0, size, size);
+    if (!isCaught) {
+      pushMatrix();
+      translate(xLoc, yLoc);
+      if (speed < 0) {
+        scale(-1, 1);
+        image(sprite, -size, 0, size, size);
+      } else {
+        image(sprite, 0, 0, size, size);
+      }
+      popMatrix();
+
+      xLoc += speed;
+      if (xLoc > (width - 50) - size || xLoc < 50) {
+        speed *= -1;
+      }
     } else {
-      image(sprite, 0, 0, size, size);
+      tint(255, alpha);
+      image(sprite, hookTipX - size/2, hookTipY - size/2, size, size);
+      noTint();
     }
-    popMatrix();
-    
-    xLoc += speed;
-
-    if (xLoc > (width - 50) - size || xLoc < 50) {
-      speed *= -1;
-    }
-}
-
-
-  void applyKita() {
   }
-  
+
+  void fadeOut() {
+    if (alpha > 0) {
+      alpha -= 15;
+    }
+  }
+
+  @Override
+  void applyKita() {
+    currentKita += value;
+  }
 }
