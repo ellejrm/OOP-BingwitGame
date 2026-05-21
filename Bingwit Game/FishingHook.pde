@@ -1,18 +1,20 @@
 float reelSpeed = 0, normalLength = 150, extendedLength = 150, extendSpeed = 2.5, castAngle = 0;
 boolean casting = false, retracting = false;
+float lineX = 538;
+float lineY = 210;
+float hookTipX, hookTipY;
 
 void drawFishingHook() {
-  float lineX = 538;
-  float lineY = 210;
   pushMatrix();
-  translate(lineX, lineY); //so that one end of the line remains static
+  translate(lineX, lineY);
 
-  if(!casting){ //swings when it's not casting
+  if (!casting) {
     float swing = radians(75) * sin(reelSpeed);
     rotate(swing);
-    reelSpeed += 0.01; //speed of swing
+    reelSpeed += 0.01;
+    castAngle = swing;
   } else {
-    rotate(castAngle); //stores the angle 
+    rotate(castAngle);
   }
   
   strokeWeight(3);
@@ -20,16 +22,19 @@ void drawFishingHook() {
   line(0, 0, 0, extendedLength);
 
   image(hook, -30, extendedLength, 50, 50);
+  hookTipX = lineX - extendedLength * sin(castAngle);
+  hookTipY = lineY + extendedLength * cos(castAngle);
+
   popMatrix();
  
-  if (casting && !retracting) { //casting
-    extendedLength += extendSpeed; //speed of extension
-    if (extendedLength >= height) { //extends
-      retracting = true;
-    }
-  } else if (casting && retracting) {//retracts
+if (casting && !retracting) {
+  extendedLength += extendSpeed;
+  if (extendedLength >= height) {
+    retracting = true;
+  }
+  } else if (casting && retracting) {
     extendedLength -= extendSpeed;
-    if (extendedLength <= normalLength) {//checks if nasa normal length na uli
+    if (extendedLength <= normalLength) {
       extendedLength = normalLength;
       casting = false;
       retracting = false;
@@ -42,6 +47,15 @@ void cast() {
     casting = true;
     retracting = false;
     extendedLength = normalLength;
-    castAngle = radians(75) * sin(reelSpeed); 
+    castAngle = radians(75) * sin(reelSpeed);
+    caughtThisCast = false;
   }
+}
+
+boolean collidesWith(SeaObject obj) {
+  float fx = obj.getXLoc() + obj.getSize() * 0.5;
+  float fy = obj.getYLoc() + obj.getSize() * 0.5;
+  float r = obj.getSize() * 0.5;
+  float d = dist(hookTipX, hookTipY, fx, fy);
+  return d <= r;
 }
