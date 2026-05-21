@@ -3,6 +3,19 @@ PFont gameFont;
 int currentLvl = 1, currentKita = 0, targetKita, gameState = 0;
 boolean justEnteredGame = false;
 ArrayList<Fish> fishes = new ArrayList<Fish>();
+ArrayList<Debris> debrisList = new ArrayList<Debris>();
+boolean caughtThisCast = false;
+
+Fish createSmallFish(int id, float x, float y) {
+  return new Fish(id, x, y, 80, 100, 2); 
+}
+Fish createBigFish(int id, float x, float y) {
+  return new Fish(id, x, y, 150, 50, 1);
+}
+Debris createDebris(float x, float y) {
+  return new Debris(x, y);
+}
+
 
 void setup() {
   size(1280, 720);
@@ -28,10 +41,14 @@ void setup() {
   fish1 = loadImage("fish1.png");
   fish2 = loadImage("fish2.png");
   fish3 = loadImage("fish3.png");
+  debris = loadImage("debris.png"); 
   gameFont = createFont("Lazydog.otf", 20);
   
   //fish
-  fishes.add(new Fish(1, 200, 350, 100, 50, 2));
+  fishes.add(createSmallFish(1, 200, 350));
+  fishes.add(createBigFish(2, 400, 450));
+  
+  debrisList.add(createDebris(1100, 490));
 }
 
 void draw() {
@@ -84,10 +101,44 @@ void drawGame() {
   text("GOAL: " + targetKita, 885, 48); 
   text("KITA: " + currentKita, 1125, 48); 
   drawFishingHook();
-  
-  for (Fish f : fishes) {
+
+for (Fish f : fishes) {
+  if (!f.isCaught) {
     f.display();
+    if (!f.isCaught && !caughtThisCast && collidesWith(f)) {
+      f.isCaught = true;
+      f.applyKita();
+      println("Caught fish " + f.getID());
+      
+      retracting = true;
+      casting = true;
+      caughtThisCast = true;
+    }
+  } else {
+    f.display();
+
+    if (!casting && !retracting && extendedLength == normalLength) {
+      f.fadeOut();
+    }
   }
+}
+
+for (Debris d : debrisList) {
+  if (d.removed) continue;
+  d.display();
+
+  if (!caughtThisCast && !d.isCaught && collidesWith(d)) {
+    d.isCaught = true;
+    d.applyKita();
+    println("Hit debris");
+    retracting = true;   
+    caughtThisCast = true;
+  }
+
+  if (d.isCaught && !casting && !retracting && extendedLength == normalLength) {
+    d.fadeAndRemove();
+  }
+}
 }
 
 
