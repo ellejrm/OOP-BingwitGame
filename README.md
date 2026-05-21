@@ -1,4 +1,5 @@
 # OOP-BingwitGame
 codes
-no collision and random spawning yet
-no treasure and debris
+with collision but no random spawning yet
+no treasure
+no store yet
