@@ -167,7 +167,7 @@ void restart() {
   timerRunning = true;
   currentKita = 0; 
   
- reelSpeed = 0;
+  reelSpeed = 0;
   extendedLength = normalLength; 
   castAngle = 0;
   casting = false;
