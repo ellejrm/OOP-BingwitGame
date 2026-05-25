@@ -2,6 +2,7 @@ int gameStartTime;
 int timeLimit = 60; //countdown
 int pausedTime = 0; //the time left when u paused the game
 boolean timerRunning = true;
+int levelDuration = 60000; // 60 seconds per level (adjust as needed)
 
 void drawTimer() {
   int elapsed;
@@ -16,10 +17,6 @@ void drawTimer() {
 
   fill(0);
   text("TIME LEFT: " + timeLeft, 300, 48);
-
-  if (timeLeft == 0) {
-    gameState = 0; //may lose/win panel dito, placeholder muna
-  }
 }
 
 void pauseTimer() {
@@ -34,4 +31,9 @@ void resumeTimer() {
     gameStartTime = millis(); 
     timerRunning = true;
   }
+}
+
+int getTimeRemaining() {
+  int elapsed = millis() - gameStartTime - pausedTime;
+  return max(0, levelDuration - elapsed);
 }
