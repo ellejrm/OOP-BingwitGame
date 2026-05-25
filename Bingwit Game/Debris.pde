@@ -45,6 +45,8 @@ class Debris extends SeaObject {
 
   @Override
   void applyKita() {
-    currentKita += value; 
+    currentKita += value;
+    debrisCaught++;
+    debrisScore += value;
   }
 }
