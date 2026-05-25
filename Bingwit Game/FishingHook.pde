@@ -1,20 +1,27 @@
-float reelSpeed = 0, normalLength = 150, extendedLength = 150, extendSpeed = 2.5, castAngle = 0;
+float reelSpeed = 0, normalLength = 80, extendedLength = 150, extendSpeed = 4, castAngle = 0;
 boolean casting = false, retracting = false;
-float lineX = 538;
+float lineX = 640;
 float lineY = 210;
 float hookTipX, hookTipY;
 
 void drawFishingHook() {
   pushMatrix();
-  translate(lineX, lineY);
+  translate(lineX + catchOffsetX, lineY + catchOffsetY);
 
   if (!casting) {
     float swing = radians(75) * sin(reelSpeed);
     rotate(swing);
-    reelSpeed += 0.01;
+    reelSpeed += 0.02;
     castAngle = swing;
   } else {
     rotate(castAngle);
+  }
+  if (!caughtSomething) {
+    if (castAngle < 0) {
+      currentAvatar = danao_r;
+    } else {
+      currentAvatar = danao_l;
+    }
   }
   
   strokeWeight(3);
@@ -38,6 +45,18 @@ if (casting && !retracting) {
       extendedLength = normalLength;
       casting = false;
       retracting = false;
+      
+    if (extendedLength <= normalLength) {
+      extendedLength = normalLength;   
+      casting = false;
+      retracting = false;
+      readyToFade = true;   
+      caughtThisCast = false;
+      caughtSomething = false;   
+      currentAvatar = danao_l;
+      catchOffsetX = 0;
+      catchOffsetY = 0;
+    }
     }
   }
 }
